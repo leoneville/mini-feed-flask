@@ -17,7 +17,7 @@ class Auth(BaseModel):
 
 class LoginResponse(BaseModel):
     type: str
-    token: str
+    access_token: str
     refresh_token: str
 
 
@@ -28,7 +28,7 @@ auth_controller = Blueprint('auth_controller', __name__, url_prefix='/auth')
 @api.validate(json=Auth, resp=Response(
     HTTP_200=LoginResponse,
     HTTP_401=DefaultResponse
-), tags=['authentication'])
+), security={}, tags=['authentication'])
 def login():
     '''
     Authenticate an user
@@ -44,9 +44,9 @@ def login():
 
         return {
             'type': 'Bearer',
-            'token': token,
+            'access_token': token,
             'refresh_token': refresh_token
-        }
+        }, 200
 
     return {'msg': 'Usuário ou senha incorretos.'}, 401
 
