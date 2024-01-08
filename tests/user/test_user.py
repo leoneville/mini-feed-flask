@@ -4,8 +4,8 @@ from factory import db
 from models import User
 
 
-def test_get_user_by_id(test_client, seed_db):
-    response = test_client.get('/users/1')
+def test_get_user_by_id(test_client, seed_db, access_token):
+    response = test_client.get('/users/1', headers=access_token)
 
     assert response.status_code == 200
     assert response.json['id'] == seed_db.id
@@ -14,15 +14,15 @@ def test_get_user_by_id(test_client, seed_db):
     assert response.json['created_at'] == seed_db.created_at.isoformat()
 
 
-def test_get_user_by_id_not_found(test_client):
-    response = test_client.get('/users/99999')
+def test_get_user_by_id_not_found(test_client, access_token):
+    response = test_client.get('/users/99999', headers=access_token)
 
     assert response.status_code == 404
     assert response.json['msg'] == 'Usuário não encontrado.'
 
 
-def test_get_all_users(test_client, seed_db):
-    response = test_client.get('/users')
+def test_get_all_users(test_client, seed_db, access_token):
+    response = test_client.get('/users', headers=access_token)
 
     assert response.status_code == 200
     assert response.json[0]['id'] == seed_db.id
@@ -31,14 +31,14 @@ def test_get_all_users(test_client, seed_db):
     assert response.json[0]['created_at'] == seed_db.created_at.isoformat()
 
 
-def test_get_all_users_not_found(test_client):
-    response = test_client.get('/users')
+def test_get_all_users_not_found(test_client, access_token):
+    response = test_client.get('/users', headers=access_token)
 
     assert response.status_code == 200
     assert response.json == []
 
 
-def test_post_user(test_client):
+def test_post_user(test_client, access_token):
     data = {
         "username": "leoneville.dev",
         "email": "leoneville.dev@gmail.com",
@@ -47,7 +47,7 @@ def test_post_user(test_client):
     }
 
     response = test_client.post(
-        '/users', json=data, content_type='application/json')
+        '/users', json=data, content_type='application/json', headers=access_token)
 
     user = User.query.filter_by(username=data['username']).first()
 
@@ -58,7 +58,7 @@ def test_post_user(test_client):
     assert user.birthdate == date.fromisoformat(data['birthdate'])
 
 
-def test_post_user_without_birthdate(test_client):
+def test_post_user_without_birthdate(test_client, access_token):
     data = {
         "username": "leoneville.dev",
         "email": "leoneville.dev@gmail.com",
@@ -66,7 +66,7 @@ def test_post_user_without_birthdate(test_client):
     }
 
     response = test_client.post(
-        '/users', json=data, content_type='application/json')
+        '/users', json=data, content_type='application/json', headers=access_token)
 
     user = User.query.filter_by(username=data['username']).first()
 
@@ -77,7 +77,7 @@ def test_post_user_without_birthdate(test_client):
     assert user.birthdate == None
 
 
-def test_post_user_username_conflict(test_client, seed_db):
+def test_post_user_username_conflict(test_client, seed_db, access_token):
     data = {
         "username": "neville_bg",
         "email": "leoneville.dev@gmail.com",
@@ -85,13 +85,13 @@ def test_post_user_username_conflict(test_client, seed_db):
     }
 
     response = test_client.post(
-        '/users', json=data, content_type='application/json')
+        '/users', json=data, content_type='application/json', headers=access_token)
 
     assert response.status_code == 409
     assert response.json['msg'] == 'Username não disponível.'
 
 
-def test_post_user_email_conflict(test_client, seed_db):
+def test_post_user_email_conflict(test_client, seed_db, access_token):
     data = {
         "username": "leoneville.dev",
         "email": "neville_bg@hotmail.com",
@@ -99,13 +99,13 @@ def test_post_user_email_conflict(test_client, seed_db):
     }
 
     response = test_client.post(
-        '/users', json=data, content_type='application/json')
+        '/users', json=data, content_type='application/json', headers=access_token)
 
     assert response.status_code == 409
     assert response.json['msg'] == 'Email já cadastrado.'
 
 
-def test_put_user(test_client, seed_db):
+def test_put_user(test_client, seed_db, access_token):
     _id = 1
     data = {
         "username": "lacoxt",
@@ -113,7 +113,7 @@ def test_put_user(test_client, seed_db):
         "birthdate": datetime.now().date().isoformat()
     }
     response = test_client.put(
-        f'/users/{_id}', json=data, content_type='application/json')
+        f'/users/{_id}', json=data, content_type='application/json', headers=access_token)
 
     user = db.session.get(User, _id)
 
@@ -124,7 +124,7 @@ def test_put_user(test_client, seed_db):
     assert user.birthdate == date.fromisoformat(data['birthdate'])
 
 
-def test_put_user_not_found(test_client):
+def test_put_user_not_found(test_client, access_token):
     data = {
         "username": "lacoxt",
         "email": "lacoxt@gmail.com",
@@ -132,47 +132,47 @@ def test_put_user_not_found(test_client):
     }
 
     response = test_client.put(
-        '/users/99999', json=data, content_type='application/json')
+        '/users/99999', json=data, content_type='application/json', headers=access_token)
 
     assert response.status_code == 404
     assert response.json['msg'] == 'Usuário não encontrado.'
 
 
-def test_put_user_username_conflict(test_client, seed_db, seed_more_db):
+def test_put_user_username_conflict(test_client, seed_db, seed_more_db, access_token):
     data = {
         "username": "leoneville.dev",
         "email": "lacoxt@gmail.com"
     }
 
     response = test_client.put(
-        '/users/1', json=data, content_type='application/json')
+        '/users/1', json=data, content_type='application/json', headers=access_token)
 
     assert response.status_code == 409
     assert response.json['msg'] == 'Username não disponível.'
 
 
-def test_put_user_email_conflict(test_client, seed_db, seed_more_db):
+def test_put_user_email_conflict(test_client, seed_db, seed_more_db, access_token):
     data = {
         "username": "lacoxt",
         "email": "leneville.dev@gmail.com"
     }
 
     response = test_client.put(
-        '/users/1', json=data, content_type='application/json')
+        '/users/1', json=data, content_type='application/json', headers=access_token)
 
     assert response.status_code == 409
     assert response.json['msg'] == 'Email já cadastrado.'
 
 
-def test_delete_user(test_client, seed_db):
-    response = test_client.delete('/users/1')
+def test_delete_user(test_client, seed_db, access_token):
+    response = test_client.delete('/users/1', headers=access_token)
 
     assert response.status_code == 200
     assert response.json['msg'] == 'Usuário deletado com sucesso.'
 
 
-def test_delete_user_not_found(test_client):
-    response = test_client.delete('users/99999')
+def test_delete_user_not_found(test_client, access_token):
+    response = test_client.delete('users/99999', headers=access_token)
 
     assert response.status_code == 404
     assert response.json['msg'] == 'Usuário não encontrado.'
