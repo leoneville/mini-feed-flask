@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"python.defaultInterpreterPath": ".\\venv\\Scripts\\python.exe",
+		"cloudcode.duetAI.inlineSuggestions.enableAuto": false
+	}
+}
