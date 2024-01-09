@@ -24,7 +24,7 @@ def seed_db():
 def seed_more_db():
     user = User(
         username="leoneville.dev",
-        email="leneville.dev@gmail.com",
+        email="leoneville.dev@gmail.com",
         password='1234@1234'
     )
     db.session.add(user)

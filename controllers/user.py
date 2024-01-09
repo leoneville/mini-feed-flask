@@ -1,8 +1,8 @@
 from datetime import date
 
 from spectree import Response
-from flask_jwt_extended import jwt_required
 from flask import Blueprint, request, json
+from flask_jwt_extended import jwt_required, current_user
 
 from factory import db, api
 from utils.response import DefaultResponse
@@ -98,14 +98,14 @@ def post_user():
         }, 500
 
 
-@user_controller.put('/<int:user_id>')
+@user_controller.put('')
 @api.validate(json=UserEdit, resp=Response(
     HTTP_200=DefaultResponse,
     HTTP_404=DefaultResponse,
     HTTP_409=DefaultResponse
-), tags=['users'], path_parameter_descriptions={"user_id": "ID do usuário"})
+), tags=['users'])
 @jwt_required()
-def put_user(user_id: int):
+def put_user():
     '''
     Update a user
     '''
@@ -115,9 +115,7 @@ def put_user(user_id: int):
     email = payload['email']
     birthdate = payload.get('birthdate')
 
-    user = db.session.get(User, user_id)
-    if user is None:
-        return {'msg': USUARIO_NAO_ENCONTRADO}, 404
+    user = current_user
 
     if User.query.filter_by(username=username).first() and username != user.username:
         return {'msg': 'Username não disponível.'}, 409

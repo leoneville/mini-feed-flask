@@ -1,10 +1,7 @@
-from datetime import date
-
 import pytest
 from flask_jwt_extended import create_access_token
 
 from models import User
-from factory import db
 from main import create_app
 
 
@@ -17,15 +14,9 @@ def test_client():
             yield testing_client
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture()
 def access_token():
-    user = User(
-        username="test_user",
-        email="test_user@hotmail.com",
-        birthdate=date.fromisoformat("1998-01-21")
-    )
-    db.session.add(user)
-    db.session.commit()
+    user = User.query.filter_by(username='neville_bg').first()
 
     token = create_access_token(identity=user.id)
 

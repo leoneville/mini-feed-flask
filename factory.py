@@ -39,4 +39,10 @@ def create_app(config_class: object | str):
 
     api.register(app)
 
+    @jwt.user_lookup_loader
+    def user_load(header, payload):
+        current_user = db.session.get(User, payload['sub'])
+
+        return current_user
+
     return app
