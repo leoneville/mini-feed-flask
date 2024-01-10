@@ -1,23 +1,7 @@
-from datetime import date
-
 import pytest
 
 from models import User
 from factory import db
-
-
-@pytest.fixture()
-def seed_db():
-    user = User(
-        username="neville_bg",
-        email="neville_bg@hotmail.com",
-        birthdate=date.fromisoformat("1998-01-21"),
-        password='1234@1234'
-    )
-    db.session.add(user)
-    db.session.commit()
-
-    yield user
 
 
 @pytest.fixture()

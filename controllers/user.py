@@ -54,8 +54,7 @@ def get_users():
 @api.validate(json=UserCreate, resp=Response(
     HTTP_201=DefaultResponse,
     HTTP_409=DefaultResponse
-), tags=['users'])
-@jwt_required()
+), security={}, tags=['users'])
 def post_user():
     '''
     Create an user

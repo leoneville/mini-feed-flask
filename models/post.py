@@ -1,5 +1,7 @@
-from dataclasses import dataclass
 from datetime import datetime
+from dataclasses import dataclass
+
+from pydantic.v1 import BaseModel
 
 from factory import db
 
@@ -15,3 +17,7 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return f'<Post: {self.id}>'
+
+
+class PostCreate(BaseModel):
+    text: str

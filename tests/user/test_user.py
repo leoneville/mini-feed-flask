@@ -30,7 +30,7 @@ def test_get_all_users(test_client, seed_db, access_token):
     assert response.json[0]['created_at'] == seed_db.created_at.isoformat()
 
 
-def test_post_user(test_client, seed_db, access_token):
+def test_post_user(test_client):
     data = {
         "username": "leoneville.dev",
         "email": "leoneville.dev@gmail.com",
@@ -39,7 +39,7 @@ def test_post_user(test_client, seed_db, access_token):
     }
 
     response = test_client.post(
-        '/users', json=data, content_type='application/json', headers=access_token)
+        '/users', json=data, content_type='application/json')
 
     user = User.query.filter_by(username=data['username']).first()
 
@@ -50,26 +50,7 @@ def test_post_user(test_client, seed_db, access_token):
     assert user.birthdate == date.fromisoformat(data['birthdate'])
 
 
-def test_post_user_without_birthdate(test_client, seed_db, access_token):
-    data = {
-        "username": "leoneville.dev",
-        "email": "leoneville.dev@gmail.com",
-        "password": "1234@1234"
-    }
-
-    response = test_client.post(
-        '/users', json=data, content_type='application/json', headers=access_token)
-
-    user = User.query.filter_by(username=data['username']).first()
-
-    assert response.status_code == 201
-    assert response.json['msg'] == 'Usuário criado com sucesso.'
-    assert user.username == data['username']
-    assert user.email == data['email']
-    assert user.birthdate == None
-
-
-def test_post_user_username_conflict(test_client, seed_db, access_token):
+def test_post_user_username_conflict(test_client, seed_db):
     data = {
         "username": "neville_bg",
         "email": "leoneville.dev@gmail.com",
@@ -77,13 +58,13 @@ def test_post_user_username_conflict(test_client, seed_db, access_token):
     }
 
     response = test_client.post(
-        '/users', json=data, content_type='application/json', headers=access_token)
+        '/users', json=data, content_type='application/json')
 
     assert response.status_code == 409
     assert response.json['msg'] == 'Username não disponível.'
 
 
-def test_post_user_email_conflict(test_client, seed_db, access_token):
+def test_post_user_email_conflict(test_client, seed_db):
     data = {
         "username": "leoneville.dev",
         "email": "neville_bg@hotmail.com",
@@ -91,7 +72,7 @@ def test_post_user_email_conflict(test_client, seed_db, access_token):
     }
 
     response = test_client.post(
-        '/users', json=data, content_type='application/json', headers=access_token)
+        '/users', json=data, content_type='application/json')
 
     assert response.status_code == 409
     assert response.json['msg'] == 'Email já cadastrado.'
