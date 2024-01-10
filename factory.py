@@ -31,7 +31,7 @@ def create_app(config_class: object | str):
 
     db.init_app(app)
 
-    from models import User
+    from models import User, Post
     migrate.init_app(app, db)
 
     from controllers.routes import initialize_routes

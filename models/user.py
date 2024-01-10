@@ -21,6 +21,7 @@ class User(db.Model):
                            nullable=False, index=True)
     birthdate: date = db.Column(db.Date)
     created_at: datetime = db.Column(db.DateTime, default=datetime.utcnow)
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def __repr__(self) -> str:
         return f'<User: {self.username}>'
