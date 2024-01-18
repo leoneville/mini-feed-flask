@@ -18,6 +18,9 @@ def seed_more_db():
 
 
 @pytest.fixture(scope='function', autouse=True)
-def cleaning_db():
-    db.session.query(User).delete()
-    db.session.commit()
+def cleaning_db(request):
+    def teardown():
+        db.session.query(User).delete()
+        db.session.commit()
+
+    request.addfinalizer(teardown)

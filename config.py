@@ -7,6 +7,8 @@ load_dotenv()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+BLACKLIST = set()
+
 
 class Config(object):
     JWT_TOKEN_LOCATION = ['headers']

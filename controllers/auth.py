@@ -1,13 +1,15 @@
-from flask import Blueprint, request
 from spectree import Response
+from flask import Blueprint, request
 
 from pydantic.v1 import BaseModel, SecretStr
 
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required
+from flask_jwt_extended import (
+    create_access_token, create_refresh_token, jwt_required, get_jwt)
 
-from models import User
-from utils.response import DefaultResponse
 from factory import api
+from models import User
+from config import BLACKLIST
+from utils.response import DefaultResponse
 
 
 class Auth(BaseModel):
@@ -60,4 +62,9 @@ def logout():
     '''
     Logout an user
     '''
+
+    jti = get_jwt['jti']
+
+    BLACKLIST.add(jti)
+
     return {'msg': 'Deslogado com sucesso'}, 200
