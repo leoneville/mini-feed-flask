@@ -65,6 +65,8 @@ def update_post(post_id: int):
         if (post := db.session.get(Post, post_id)) is None:
             return {'msg': POST_NAO_ENCONTRADO}, 404
 
+        print(current_user.role)
+
         if not (post.author_id == current_user.id or current_user.role.can_manage_posts):
             return {'msg': 'Você não tem permissão para editar este post.'}, 403
 

@@ -28,7 +28,7 @@ def test_denied_update_post(test_client, seed_db, access_token, seed_post):
     response = test_client.put('/posts/2', json=obj, headers=access_token)
 
     assert response.status_code == 403
-    assert response.json['msg'] == 'Você não tem autorização para atualizar este post.'
+    assert response.json['msg'] == 'Você não tem permissão para editar este post.'
 
 
 def test_delete_post(test_client, seed_db, access_token, seed_post):

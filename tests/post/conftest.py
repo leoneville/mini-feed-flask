@@ -13,7 +13,7 @@ def seed_post():
         },
         {
             'text': 'texto do post 2',
-            'author_id': 2
+            'author_id': 99
         }
     ]
 

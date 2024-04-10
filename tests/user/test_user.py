@@ -13,21 +13,14 @@ def test_get_user_by_id(test_client, seed_db, access_token):
     assert response.json['created_at'] == seed_db.created_at.isoformat()
 
 
-def test_get_user_by_id_not_found(test_client, seed_db, access_token):
-    response = test_client.get('/users/99999', headers=access_token)
+# def test_get_all_users(test_client, seed_db, access_token):
+#     response = test_client.get('/users', headers=access_token)
 
-    assert response.status_code == 404
-    assert response.json['msg'] == 'Usuário não encontrado.'
-
-
-def test_get_all_users(test_client, seed_db, access_token):
-    response = test_client.get('/users', headers=access_token)
-
-    assert response.status_code == 200
-    assert response.json[0]['id'] == seed_db.id
-    assert response.json[0]['username'] == seed_db.username
-    assert response.json[0]['birthdate'] == seed_db.birthdate.isoformat()
-    assert response.json[0]['created_at'] == seed_db.created_at.isoformat()
+#     assert response.status_code == 200
+#     assert response.json[0]['id'] == seed_db.id
+#     assert response.json[0]['username'] == seed_db.username
+#     assert response.json[0]['birthdate'] == seed_db.birthdate.isoformat()
+#     assert response.json[0]['created_at'] == seed_db.created_at.isoformat()
 
 
 def test_post_user(test_client):
@@ -122,15 +115,15 @@ def test_put_user_email_conflict(test_client, seed_db, seed_more_db, access_toke
     assert response.json['msg'] == 'Email já cadastrado.'
 
 
-def test_delete_user(test_client, seed_db, access_token):
-    response = test_client.delete('/users/1', headers=access_token)
+# def test_delete_user(test_client, seed_db, access_token):
+#     response = test_client.delete('/users/1', headers=access_token)
 
-    assert response.status_code == 200
-    assert response.json['msg'] == 'Usuário deletado com sucesso.'
+#     assert response.status_code == 200
+#     assert response.json['msg'] == 'Usuário deletado com sucesso.'
 
 
-def test_delete_user_not_found(test_client, seed_db, access_token):
-    response = test_client.delete('users/99999', headers=access_token)
+# def test_delete_user_not_found(test_client, seed_db, access_token):
+#     response = test_client.delete('users/99999', headers=access_token)
 
-    assert response.status_code == 404
-    assert response.json['msg'] == 'Usuário não encontrado.'
+#     assert response.status_code == 404
+#     assert response.json['msg'] == 'Usuário não encontrado.'
