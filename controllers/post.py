@@ -65,8 +65,8 @@ def update_post(post_id: int):
         if (post := db.session.get(Post, post_id)) is None:
             return {'msg': POST_NAO_ENCONTRADO}, 404
 
-        if post.author_id != current_user.id:
-            return {'msg': 'Você não tem autorização para atualizar este post.'}, 403
+        if not (post.author_id == current_user.id or current_user.role.can_manage_posts):
+            return {'msg': 'Você não tem permissão para editar este post.'}, 403
 
         payload = request.get_json()
         text = payload['text']
@@ -102,7 +102,7 @@ def delete_post(post_id: int):
         if (post := db.session.get(Post, post_id)) is None:
             return {'msg': POST_NAO_ENCONTRADO}, 404
 
-        if post.author_id != current_user.id:
+        if not (post.author_id == current_user.id or current_user.role.can_manage_posts):
             return {'msg': 'Você não tem permissão para deletar este post.'}, 403
 
         db.session.delete(post)
