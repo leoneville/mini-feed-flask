@@ -1,12 +1,13 @@
+from datetime import datetime, date
 from typing import Optional, List
 from dataclasses import dataclass
-from datetime import datetime, date
 
-from pydantic.v1 import BaseModel, EmailStr, SecretStr
 from werkzeug.security import generate_password_hash, check_password_hash
+from pydantic.v1 import BaseModel, EmailStr, SecretStr
 
-from factory import db
+from models.role import Role, RoleResponse
 from utils.models import OrmBase
+from factory import db
 
 
 @dataclass
@@ -17,11 +18,21 @@ class User(db.Model):
     username: str = db.Column(
         db.String(64), unique=True, nullable=False, index=True)
     password_hash: str = db.Column(db.String(128), index=True)
+
     email: str = db.Column(db.String(128), unique=True,
                            nullable=False, index=True)
     birthdate: date = db.Column(db.Date)
     created_at: datetime = db.Column(db.DateTime, default=datetime.utcnow)
+
+    role_id: int = db.Column(db.Integer, db.ForeignKey('role.id'))
+
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+
+        if self.role is None:
+            self.role = Role.query.filter_by(name="user").first()
 
     def __repr__(self) -> str:
         return f'<User: {self.username}>'
@@ -57,6 +68,7 @@ class UserResponse(OrmBase):
     email: EmailStr
     birthdate: Optional[date]
     created_at: datetime
+    role: RoleResponse
 
 
 class UserResponseList(BaseModel):
