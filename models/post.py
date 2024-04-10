@@ -6,6 +6,7 @@ from pydantic.v1 import BaseModel
 
 from factory import db
 from utils.models import OrmBase
+from models.user import UserResponseSimple
 
 
 @dataclass
@@ -30,8 +31,8 @@ class PostCreate(BaseModel):
 
 class PostResponse(OrmBase):
     text: str
-    author_id: int
     created: datetime
+    author: UserResponseSimple
 
 
 class PostResponseList(BaseModel):

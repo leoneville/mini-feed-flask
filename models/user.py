@@ -73,3 +73,7 @@ class UserResponse(OrmBase):
 
 class UserResponseList(BaseModel):
     __root__: List[UserResponse]
+
+
+class UserResponseSimple(OrmBase):
+    username: str
