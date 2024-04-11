@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from config import BLACKLIST
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -25,6 +26,7 @@ api = SpecTree(
 
 def create_app(config_class: object | str):
     app = Flask(__name__)
+    CORS(app, supports_credentials=True)
 
     @app.get('/')
     @api.validate(tags=['Página Inicial'])

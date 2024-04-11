@@ -34,4 +34,9 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "app.db")
+    uri = os.getenv("DATABASE_URL")
+
+    if uri and uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://")
+
+    SQLALCHEMY_DATABASE_URI = uri
