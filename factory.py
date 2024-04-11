@@ -85,8 +85,8 @@ def create_app(config_class: object | str):
     from controllers.routes import initialize_routes
     initialize_routes(app)
 
-    if config_class != "config.ProductionConfig":
-        api.register(app)
+    # if config_class != "config.ProductionConfig":
+    api.register(app)
 
     @jwt.token_in_blocklist_loader
     def revoked_token(header, payload):
