@@ -196,7 +196,7 @@ def delete_user(user_id: int):
     Delete a user
     '''
     try:
-        if not (current_user and current_user.role_can_manage_users):
+        if not (current_user and current_user.role.can_manage_users):
             return {"msg": "Você não tem permissão para deletar este usuário."}, 403
 
         user = db.session.get(User, user_id)
