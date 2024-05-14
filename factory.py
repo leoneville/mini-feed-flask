@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_cors import CORS
-from config import BLACKLIST
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from spectree import SpecTree, SecurityScheme
+import redis
 
 db = SQLAlchemy()
 jwt = JWTManager()
@@ -22,7 +22,9 @@ api = SpecTree(
     ],
     security={'api_key': []}
 )
-
+jwt_redis_blocklist = redis.StrictRedis(
+    host="127.0.0.1", port='6379', db=0, decode_responses=True
+)
 
 def create_app(config_class: object | str):
     app = Flask(__name__)
@@ -89,8 +91,10 @@ def create_app(config_class: object | str):
     api.register(app)
 
     @jwt.token_in_blocklist_loader
-    def revoked_token(header, payload):
-        return payload['jti'] in BLACKLIST
+    def revoked_token(jwt_header, jwt_payload: dict):
+        jti = jwt_payload["jti"]
+        token_in_redis = jwt_redis_blocklist.get(jti)
+        return token_in_redis is not None
 
     @jwt.expired_token_loader
     def expired_token(header, payload):
@@ -102,7 +106,7 @@ def create_app(config_class: object | str):
 
     @jwt.revoked_token_loader
     def revoked_token(header, payload):
-        return {'msg': 'Token revogado.'}, 401
+        return {'msg': 'Você foi deslogado. Por favor, faça o login novamente.'}, 401
 
     @jwt.user_lookup_loader
     def user_load(header, payload):

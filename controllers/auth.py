@@ -4,11 +4,13 @@ from flask import Blueprint, request
 from pydantic.v1 import BaseModel, SecretStr
 
 from flask_jwt_extended import (
-    create_access_token, create_refresh_token, jwt_required, get_jwt)
+        create_access_token, create_refresh_token, jwt_required, get_jwt,
+        get_jwt_identity
+    )
 
-from factory import api
+from factory import api, jwt_redis_blocklist
 from models import User
-from config import BLACKLIST
+from config import ACCESS_EXPIRES
 from utils.response import DefaultResponse
 
 
@@ -55,7 +57,8 @@ def login():
 
 @auth_controller.post('/logout')
 @api.validate(resp=Response(
-    HTTP_200=DefaultResponse
+    HTTP_200=DefaultResponse,
+    HTTP_401=None
 ), tags=['authentication'])
 @jwt_required()
 def logout():
@@ -63,8 +66,22 @@ def logout():
     Logout an user
     '''
 
-    jti = get_jwt['jti']
-
-    BLACKLIST.add(jti)
+    jti = get_jwt()['jti']
+    jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
 
     return {'msg': 'Deslogado com sucesso'}, 200
+
+
+@auth_controller.post('/refresh_token')
+@api.validate(resp=Response(
+    HTTP_200=None,
+    HTTP_401=None
+), tags=['authentication'])
+@jwt_required(refresh=True)
+def refresh_token():
+    """
+    Generates a new authentication token
+    """
+    identity = get_jwt_identity()
+
+    return {"access_token": create_access_token(identity=identity)}, 200
