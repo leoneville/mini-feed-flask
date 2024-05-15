@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-from spectree import SpecTree, SecurityScheme
+from spectree import SpecTree, SecurityScheme, Response
 import redis
 
 db = SQLAlchemy()
@@ -14,6 +14,11 @@ api = SpecTree(
     title='Mini Feed API',
     version='v.1.0',
     path='docs',
+    servers=[
+        {"url": "http://127.0.0.1:5000", "description": "Servidor de Desenvolvimento"},
+        {"url": "https://mini-feed-flask.onrender.com/",
+            "description": "Servidor de Produção"}
+    ],
     security_schemes=[
         SecurityScheme(
             name='api_key',
@@ -26,12 +31,15 @@ jwt_redis_blocklist = redis.StrictRedis(
     host="127.0.0.1", port='6379', db=0, decode_responses=True
 )
 
+
 def create_app(config_class: object | str):
     app = Flask(__name__)
     CORS(app, supports_credentials=True)
 
     @app.get('/')
-    @api.validate(tags=['Página Inicial'])
+    @api.validate(resp=Response(
+        HTTP_200=None
+    ), tags=['Página Inicial'])
     def hello_world():
         """API no AR XD"""
         return """

@@ -1,0 +1,870 @@
+components:
+  schemas:
+    Auth.cab1000:
+      properties:
+        password:
+          format: password
+          title: Password
+          type: string
+          writeOnly: true
+        username:
+          title: Username
+          type: string
+      required:
+        - username
+        - password
+      title: Auth
+      type: object
+    DefaultErrorResponse.61bf37f:
+      properties:
+        msg:
+          title: Msg
+          type: string
+        msg_error:
+          title: Msg Error
+          type: string
+        type_error:
+          title: Type Error
+          type: string
+      required:
+        - msg
+        - type_error
+        - msg_error
+      title: DefaultErrorResponse
+      type: object
+    DefaultResponse.61bf37f:
+      properties:
+        msg:
+          title: Msg
+          type: string
+      required:
+        - msg
+      title: DefaultResponse
+      type: object
+    LoginResponse.cab1000:
+      properties:
+        access_token:
+          title: Access Token
+          type: string
+        refresh_token:
+          title: Refresh Token
+          type: string
+        type:
+          title: Type
+          type: string
+      required:
+        - type
+        - access_token
+        - refresh_token
+      title: LoginResponse
+      type: object
+    PostCreate.cfc6cb0:
+      properties:
+        text:
+          title: Text
+          type: string
+      required:
+        - text
+      title: PostCreate
+      type: object
+    PostResponse.cfc6cb0:
+      properties:
+        author:
+          $ref: '#/components/schemas/PostResponse.cfc6cb0.UserResponseSimple'
+        created:
+          format: date-time
+          title: Created
+          type: string
+        id:
+          title: Id
+          type: integer
+        text:
+          title: Text
+          type: string
+      required:
+        - id
+        - text
+        - created
+        - author
+      title: PostResponse
+      type: object
+    PostResponse.cfc6cb0.UserResponseSimple:
+      properties:
+        id:
+          title: Id
+          type: integer
+        username:
+          title: Username
+          type: string
+      required:
+        - id
+        - username
+      title: UserResponseSimple
+      type: object
+    PostResponseList.cfc6cb0:
+      properties:
+        page:
+          title: Page
+          type: integer
+        pages:
+          title: Pages
+          type: integer
+        posts:
+          items:
+            $ref: '#/components/schemas/PostResponseList.cfc6cb0.PostResponse'
+          title: Posts
+          type: array
+        total:
+          title: Total
+          type: integer
+      required:
+        - page
+        - pages
+        - total
+        - posts
+      title: PostResponseList
+      type: object
+    PostResponseList.cfc6cb0.PostResponse:
+      properties:
+        author:
+          $ref: '#/components/schemas/PostResponseList.cfc6cb0.UserResponseSimple'
+        created:
+          format: date-time
+          title: Created
+          type: string
+        id:
+          title: Id
+          type: integer
+        text:
+          title: Text
+          type: string
+      required:
+        - id
+        - text
+        - created
+        - author
+      title: PostResponse
+      type: object
+    PostResponseList.cfc6cb0.UserResponseSimple:
+      properties:
+        id:
+          title: Id
+          type: integer
+        username:
+          title: Username
+          type: string
+      required:
+        - id
+        - username
+      title: UserResponseSimple
+      type: object
+    SearchModel.cfc6cb0:
+      properties:
+        page:
+          default: 1
+          title: Page
+          type: integer
+        per_page:
+          default: 10
+          title: Per Page
+          type: integer
+        reverse:
+          default: false
+          title: Reverse
+          type: boolean
+        search:
+          title: Search
+          type: string
+      title: SearchModel
+      type: object
+    UserCreate.dafaac4:
+      properties:
+        birthdate:
+          format: date
+          title: Birthdate
+          type: string
+        email:
+          format: email
+          title: Email
+          type: string
+        password:
+          format: password
+          title: Password
+          type: string
+          writeOnly: true
+        username:
+          title: Username
+          type: string
+      required:
+        - username
+        - email
+        - password
+      title: UserCreate
+      type: object
+    UserEdit.dafaac4:
+      properties:
+        birthdate:
+          format: date
+          title: Birthdate
+          type: string
+        email:
+          format: email
+          title: Email
+          type: string
+        username:
+          title: Username
+          type: string
+      required:
+        - username
+        - email
+      title: UserEdit
+      type: object
+    UserResponse.dafaac4:
+      properties:
+        birthdate:
+          format: date
+          title: Birthdate
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        email:
+          format: email
+          title: Email
+          type: string
+        id:
+          title: Id
+          type: integer
+        role:
+          $ref: '#/components/schemas/UserResponse.dafaac4.RoleResponse'
+        username:
+          title: Username
+          type: string
+      required:
+        - id
+        - username
+        - email
+        - created_at
+        - role
+      title: UserResponse
+      type: object
+    UserResponse.dafaac4.RoleResponse:
+      properties:
+        can_access_sensitive_information:
+          title: Can Access Sensitive Information
+          type: boolean
+        can_manage_posts:
+          title: Can Manage Posts
+          type: boolean
+        can_manage_users:
+          title: Can Manage Users
+          type: boolean
+        id:
+          title: Id
+          type: integer
+        name:
+          title: Name
+          type: string
+      required:
+        - id
+        - name
+        - can_access_sensitive_information
+        - can_manage_users
+        - can_manage_posts
+      title: RoleResponse
+      type: object
+    UserResponseList.dafaac4:
+      items:
+        $ref: '#/components/schemas/UserResponseList.dafaac4.UserResponse'
+      title: UserResponseList
+      type: array
+    UserResponseList.dafaac4.RoleResponse:
+      properties:
+        can_access_sensitive_information:
+          title: Can Access Sensitive Information
+          type: boolean
+        can_manage_posts:
+          title: Can Manage Posts
+          type: boolean
+        can_manage_users:
+          title: Can Manage Users
+          type: boolean
+        id:
+          title: Id
+          type: integer
+        name:
+          title: Name
+          type: string
+      required:
+        - id
+        - name
+        - can_access_sensitive_information
+        - can_manage_users
+        - can_manage_posts
+      title: RoleResponse
+      type: object
+    UserResponseList.dafaac4.UserResponse:
+      properties:
+        birthdate:
+          format: date
+          title: Birthdate
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        email:
+          format: email
+          title: Email
+          type: string
+        id:
+          title: Id
+          type: integer
+        role:
+          $ref: '#/components/schemas/UserResponseList.dafaac4.RoleResponse'
+        username:
+          title: Username
+          type: string
+      required:
+        - id
+        - username
+        - email
+        - created_at
+        - role
+      title: UserResponse
+      type: object
+    ValidationError.6a07bef:
+      description: Model of a validation error response.
+      items:
+        $ref: '#/components/schemas/ValidationError.6a07bef.ValidationErrorElement'
+      title: ValidationError
+      type: array
+    ValidationError.6a07bef.ValidationErrorElement:
+      description: Model of a validation error response element.
+      properties:
+        ctx:
+          title: Error context
+          type: object
+        loc:
+          items:
+            type: string
+          title: Missing field name
+          type: array
+        msg:
+          title: Error message
+          type: string
+        type:
+          title: Error type
+          type: string
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationErrorElement
+      type: object
+  securitySchemes:
+    api_key:
+      in: header
+      name: Authorization
+      type: apiKey
+info:
+  title: Mini Feed API
+  version: v.1.0
+openapi: 3.0.3
+paths:
+  /:
+    get:
+      description: ''
+      operationId: get__
+      parameters: []
+      responses:
+        '200':
+          description: OK
+      summary: API no AR XD
+      tags:
+        - Página Inicial
+  /auth/login:
+    post:
+      description: ''
+      operationId: post__auth_login
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth.cab1000'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse.cab1000'
+          description: OK
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Unauthorized
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      security: []
+      summary: Authenticate an user
+      tags:
+        - authentication
+  /auth/logout:
+    post:
+      description: ''
+      operationId: post__auth_logout
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: OK
+        '401':
+          description: Unauthorized
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      summary: Logout an user
+      tags:
+        - authentication
+  /auth/refresh_token:
+    post:
+      description: ''
+      operationId: post__auth_refresh_token
+      parameters: []
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      summary: Generates a new authentication token
+      tags:
+        - authentication
+  /posts:
+    get:
+      description: ''
+      operationId: get__posts
+      parameters:
+        - description: ''
+          in: query
+          name: search
+          required: false
+          schema:
+            title: Search
+            type: string
+        - description: ''
+          in: query
+          name: reverse
+          required: false
+          schema:
+            default: false
+            title: Reverse
+            type: boolean
+        - description: ''
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            title: Page
+            type: integer
+        - description: ''
+          in: query
+          name: per_page
+          required: false
+          schema:
+            default: 10
+            title: Per Page
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponseList.cfc6cb0'
+          description: OK
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse.61bf37f'
+          description: Internal Server Error
+      summary: Get all posts
+      tags:
+        - posts
+    post:
+      description: ''
+      operationId: post__posts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCreate.cfc6cb0'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Created
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse.61bf37f'
+          description: Internal Server Error
+      summary: Create post
+      tags:
+        - posts
+  /posts/{post_id}:
+    delete:
+      description: ''
+      operationId: delete__posts_{post_id}
+      parameters:
+        - description: ''
+          in: path
+          name: post_id
+          required: true
+          schema:
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: OK
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse.61bf37f'
+          description: Internal Server Error
+      summary: Delete post
+      tags:
+        - posts
+    get:
+      description: ''
+      operationId: get__posts_{post_id}
+      parameters:
+        - description: ''
+          in: path
+          name: post_id
+          required: true
+          schema:
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse.cfc6cb0'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse.61bf37f'
+          description: Internal Server Error
+      summary: Get post by id
+      tags:
+        - posts
+    put:
+      description: ''
+      operationId: put__posts_{post_id}
+      parameters:
+        - description: ''
+          in: path
+          name: post_id
+          required: true
+          schema:
+            format: int32
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCreate.cfc6cb0'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: OK
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse.61bf37f'
+          description: Internal Server Error
+      summary: Update post
+      tags:
+        - posts
+  /users:
+    get:
+      description: ''
+      operationId: get__users
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseList.dafaac4'
+          description: OK
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      summary: Get all users
+      tags:
+        - users
+    post:
+      description: ''
+      operationId: post__users
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate.dafaac4'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Created
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Conflict
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      security: []
+      summary: Create an user
+      tags:
+        - users
+    put:
+      description: ''
+      operationId: put__users
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEdit.dafaac4'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Not Found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Conflict
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      summary: Update a user
+      tags:
+        - users
+  /users/me:
+    get:
+      description: ''
+      operationId: get__users_me
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse.dafaac4'
+          description: OK
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      summary: Returns information about the current user
+      tags:
+        - users
+  /users/{user_id}:
+    delete:
+      description: ''
+      operationId: delete__users_{user_id}
+      parameters:
+        - description: ID do usuário
+          in: path
+          name: user_id
+          required: true
+          schema:
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      summary: Delete a user
+      tags:
+        - users
+    get:
+      description: ''
+      operationId: get__users_{user_id}
+      parameters:
+        - description: ID do usuário
+          in: path
+          name: user_id
+          required: true
+          schema:
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse.dafaac4'
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse.61bf37f'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError.6a07bef'
+          description: Unprocessable Entity
+      summary: Get a specified user
+      tags:
+        - users
+security:
+  - api_key: []
+tags:
+  - name: Página Inicial
+  - name: authentication
+  - name: users
+  - name: posts
